@@ -1,0 +1,2258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clínica Estética - Ficha de Pacientes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-color: #f0f2f5; /* Cinza claro macOS */
+            --container-bg: #ffffff;
+            --primary-accent: #a7d7c5;  /* Verde claro sugerido */
+            --secondary-accent: #e0f2e9; /* Verde mais claro */
+            --text-color: #333;
+            --label-color: #555;
+            --input-bg: #f8f9fa;
+            --input-border: #ced4da;
+            --button-bg: #6abf9c; /* Verde médio para botões */
+            --button-hover-bg: #5aa088; /* Verde mais escuro no hover */
+            --button-text: #ffffff;
+            --modal-overlay: rgba(0, 0, 0, 0.6);
+            --border-radius: 10px; /* Cantos mais arredondados */
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --input-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px; /* Base font size */
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            background-color: var(--container-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 1.8rem; /* Aumentei um pouco */
+            font-weight: 600;
+            color: var(--text-color); /* Cor mais escura para destaque */
+            margin-bottom: 1.5rem;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-container input[type="search"] {
+            width: 60%;
+            max-width: 400px;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            background-color: var(--input-bg);
+            box-shadow: var(--input-shadow);
+        }
+
+        .search-container button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+
+        .search-container button:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        form section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: var(--secondary-accent); /* Fundo suave para seções */
+            border-radius: var(--border-radius);
+            border: 1px solid var(--primary-accent);
+        }
+
+        form legend, form h3 {
+            font-size: 1.3rem; /* Aumentei */
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary-accent);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--label-color);
+            font-size: 0.95rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="number"],
+        .form-group input[type="tel"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            background-color: var(--input-bg);
+            box-shadow: var(--input-shadow);
+            font-family: var(--font-family);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+         .form-group input:focus,
+         .form-group select:focus,
+         .form-group textarea:focus {
+             outline: none;
+             border-color: var(--button-bg);
+             box-shadow: var(--input-shadow), 0 0 0 3px rgba(106, 191, 156, 0.3);
+         }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            align-items: center;
+        }
+
+        .radio-group label, .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 400;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+         .radio-group input[type="radio"],
+         .checkbox-group input[type="checkbox"] {
+             margin-right: 5px;
+             accent-color: var(--button-bg); /* Cor do radio/checkbox */
+             cursor: pointer;
+             width: 16px;
+             height: 16px;
+         }
+
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        .action-buttons button {
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .action-buttons button[type="submit"] {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+        }
+
+        .action-buttons button[type="submit"]:hover {
+            background-color: var(--button-hover-bg);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-buttons button[type="button"] {
+            background-color: #f0f0f0; /* Cinza claro */
+            color: var(--label-color);
+            border: 1px solid #ccc;
+        }
+
+        .action-buttons button[type="button"]:hover {
+            background-color: #e0e0e0;
+        }
+
+         /* Estilos para o Termo de Consentimento */
+        #consent-section details {
+            margin-top: 1rem;
+            background-color: #fdfdfd;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 0.8rem;
+        }
+         #consent-section summary {
+             cursor: pointer;
+             font-weight: 500;
+             color: var(--button-bg);
+             list-style-type: none; /* Remove a seta padrão */
+             position: relative;
+             padding-left: 1.5em;
+         }
+         #consent-section summary::before {
+             content: '▶';
+             position: absolute;
+             left: 0;
+             top: 0;
+             transition: transform 0.2s ease;
+         }
+         #consent-section details[open] summary::before {
+             transform: rotate(90deg);
+         }
+
+         #consent-section .consent-full-text {
+             margin-top: 1rem;
+             font-size: 0.9rem;
+             line-height: 1.5;
+             color: #444;
+             max-height: 300px; /* Altura máxima para evitar excesso */
+             overflow-y: auto; /* Barra de rolagem se necessário */
+             padding: 0.5rem;
+             border-top: 1px dashed #ddd;
+         }
+
+         #print-consent-btn {
+             margin-top: 1rem;
+             padding: 0.6rem 1.2rem;
+             background-color: #6c757d; /* Cinza */
+             color: white;
+             border: none;
+             border-radius: var(--border-radius);
+             cursor: pointer;
+             transition: background-color 0.2s ease;
+         }
+         #print-consent-btn:hover {
+             background-color: #5a6268;
+         }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: var(--modal-overlay); /* Black w/ opacity */
+            padding-top: 60px; /* Location of the box */
+        }
+
+        .modal-content {
+            background-color: var(--container-bg);
+            margin: 5% auto; /* 5% from the top and centered */
+            padding: 25px 30px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 800px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative; /* For close button positioning */
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #modal-patient-name {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--button-bg);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary-accent);
+            padding-bottom: 0.5rem;
+        }
+
+        #modal-patient-data {
+            margin-bottom: 2rem;
+        }
+
+        #modal-patient-data h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.4rem;
+        }
+
+        #modal-patient-data p {
+            margin-bottom: 0.6rem;
+            font-size: 1rem;
+        }
+        #modal-patient-data p strong {
+            font-weight: 500;
+            color: var(--label-color);
+            margin-right: 8px;
+            display: inline-block;
+            min-width: 150px; /* Alinha os valores */
+        }
+
+        /* Treatment Tracker Styles */
+        #modal-treatment-tracker {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: var(--secondary-accent);
+            border-radius: var(--border-radius);
+        }
+
+        #modal-treatment-tracker h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .add-treatment-form {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .add-treatment-form .form-group {
+            flex-grow: 1;
+        }
+
+        #add-treatment-button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+            height: fit-content; /* Ajusta altura */
+        }
+        #add-treatment-button:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        #treatment-list {
+            list-style: none;
+            padding: 0;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        #treatment-list li {
+            background-color: var(--container-bg);
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px; /* Menor arredondamento */
+            border: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+        #treatment-list li .treatment-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+         #treatment-list li .check-icon {
+             color: #28a745; /* Verde para sucesso */
+             font-weight: bold;
+             font-size: 1.1rem;
+         }
+         #treatment-list li .treatment-date {
+             font-size: 0.9em;
+             color: #666;
+             margin-left: 15px;
+         }
+
+
+        .modal-actions {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .modal-actions button {
+             padding: 0.7rem 1.5rem;
+             border: none;
+             border-radius: var(--border-radius);
+             cursor: pointer;
+             font-size: 0.95rem;
+             font-weight: 500;
+             transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+         #edit-patient-button {
+             background-color: #ffc107; /* Amarelo alerta */
+             color: #333;
+         }
+         #edit-patient-button:hover {
+             background-color: #e0a800;
+         }
+         #delete-patient-button {
+             background-color: #dc3545; /* Vermelho perigo */
+             color: white;
+         }
+         #delete-patient-button:hover {
+             background-color: #c82333;
+         }
+
+
+        /* Hidden div for printing */
+        #printable-consent {
+            display: none;
+            font-family: 'Times New Roman', Times, serif; /* Fonte comum para impressão */
+            color: black;
+            background-color: white;
+            padding: 2cm; /* Margens de impressão */
+            line-height: 1.4;
+        }
+        #printable-consent h2 {
+            text-align: center;
+            margin-bottom: 1.5cm;
+        }
+        #printable-consent p {
+            margin-bottom: 0.5cm;
+            text-align: justify;
+        }
+         #printable-consent .signatures {
+             margin-top: 3cm;
+         }
+         #printable-consent .signature-line {
+             border-bottom: 1px solid black;
+             margin-bottom: 0.2cm;
+             width: 80%;
+             margin-left: auto;
+             margin-right: auto;
+         }
+         #printable-consent .signature-label {
+             text-align: center;
+             font-size: 0.9em;
+         }
+
+
+        /* Print Specific Styles */
+        @media print {
+            body {
+                background-color: white;
+                color: black;
+                padding: 0;
+                font-size: 12pt; /* Tamanho padrão para impressão */
+                font-family: 'Times New Roman', Times, serif;
+            }
+
+            .container, header, .search-container, form, .action-buttons, .modal, .no-print {
+                display: none !important; /* Esconde tudo exceto o #printable-consent */
+            }
+
+            #printable-consent {
+                display: block !important; /* Mostra apenas o conteúdo para impressão */
+                box-shadow: none;
+                border: none;
+                padding: 0; /* Reset padding for print */
+                margin: 0;
+            }
+
+            @page {
+                margin: 2cm; /* Margens da página */
+            }
+        }
+
+         /* Responsive adjustments */
+         @media (max-width: 768px) {
+             .container {
+                 padding: 1rem;
+                 margin: 1rem auto;
+             }
+             header h1 {
+                 font-size: 1.5rem;
+             }
+             .form-grid {
+                 grid-template-columns: 1fr; /* Uma coluna em telas menores */
+             }
+             .action-buttons {
+                 flex-direction: column;
+                 gap: 0.5rem;
+             }
+             .action-buttons button {
+                 width: 100%;
+             }
+             .modal-content {
+                 width: 95%;
+                 padding: 20px;
+             }
+             .add-treatment-form {
+                 flex-direction: column;
+                 align-items: stretch;
+             }
+              .add-treatment-form .form-group {
+                  width: 100%;
+              }
+             #add-treatment-button {
+                 width: 100%;
+                 margin-top: 0.5rem;
+             }
+             .modal-actions {
+                 flex-direction: column;
+             }
+             .modal-actions button {
+                 width: 100%;
+             }
+         }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Estética Integrativa & Ozônioterapia, resultados reais na sua autoestima.</h1>
+            <div class="search-container no-print">
+                <input type="search" id="search-input" placeholder="Buscar paciente pelo nome...">
+                <button id="search-button">Buscar</button>
+            </div>
+        </header>
+
+        <form id="patient-form">
+            <input type="hidden" id="editing-patient-id"> <!-- Campo oculto para ID em edição -->
+
+            <!-- TERMO DE CONSENTIMENTO -->
+            <section id="consent-section">
+                <h3>TERMO DE CONSENTIMENTO INFORMADO</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="consent-patient-name">Nome do Paciente:</label>
+                        <input type="text" id="consent-patient-name" name="consent_patient_name" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="consent-treatment">Tratamento de:</label>
+                        <input type="text" id="consent-treatment" name="consent_treatment" placeholder="Ex: Drenagem Linfática" required>
+                    </div>
+                     <div class="form-group">
+                        <label for="consent-date">Data:</label>
+                        <input type="date" id="consent-date" name="consent_date" required>
+                    </div>
+                </div>
+                <details class="no-print">
+                     <summary>Ler Termo Completo</summary>
+                     <div class="consent-full-text">
+                         <!-- O texto completo será inserido aqui via JS -->
+                     </div>
+                 </details>
+                 <button type="button" id="print-consent-btn" class="no-print">Imprimir Termo</button>
+            </section>
+
+            <!-- FICHA DE AVALIAÇÃO CORPORAL -->
+            <section>
+                <h3>FICHA DE AVALIAÇÃO CORPORAL</h3>
+                <fieldset>
+                    <legend>Dados Pessoais</legend>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="corp-name">Nome:</label>
+                            <input type="text" id="corp-name" name="corp_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="corp-ethnicity">Etnia:</label>
+                            <input type="text" id="corp-ethnicity" name="corp_ethnicity">
+                        </div>
+                        <div class="form-group">
+                            <label for="corp-birthdate">Data de Nascimento:</label>
+                            <input type="date" id="corp-birthdate" name="corp_birthdate">
+                        </div>
+                        <div class="form-group">
+                            <label for="corp-age">Idade:</label>
+                            <input type="number" id="corp-age" name="corp_age">
+                        </div>
+                        <div class="form-group">
+                             <label for="corp-rg">RG:</label>
+                             <input type="text" id="corp-rg" name="corp_rg" required> <!-- RG adicionado como identificador -->
+                         </div>
+                         <div class="form-group">
+                             <label>Sexo:</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="corp_sex" value="Feminino"> Feminino</label>
+                                 <label><input type="radio" name="corp_sex" value="Masculino"> Masculino</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label for="corp-address">Endereço:</label>
+                             <input type="text" id="corp-address" name="corp_address">
+                         </div>
+                         <div class="form-group">
+                             <label for="corp-city">Cidade:</label>
+                             <input type="text" id="corp-city" name="corp_city">
+                         </div>
+                         <div class="form-group">
+                             <label for="corp-phone">Telefone:</label>
+                             <input type="tel" id="corp-phone" name="corp_phone">
+                         </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Anamnese</legend>
+                    <div class="form-group">
+                         <label for="corp-main-complaint">Queixa principal:</label>
+                         <textarea id="corp-main-complaint" name="corp_main_complaint"></textarea>
+                     </div>
+                     <div class="form-grid">
+                         <div class="form-group">
+                             <label>Faz ingestão de bebidas alcoólicas?</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="corp_alcohol" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="corp_alcohol" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>É fumante?</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="corp_smoker" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="corp_smoker" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Tem algum Metal no Corpo? Local/Quanto tempo?</label>
+                             <input type="text" id="corp-metal" name="corp_metal">
+                         </div>
+                         <div class="form-group">
+                             <label>Realiza atividade física? Qual tipo? Com que frequência?</label>
+                             <input type="text" id="corp-physical-activity" name="corp_physical_activity">
+                         </div>
+                         <div class="form-group">
+                             <label>Dorme bem?</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="corp_sleep" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="corp_sleep" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Faz restrições alimentares? Quais?</label>
+                             <input type="text" id="corp-diet-restrictions" name="corp_diet_restrictions">
+                         </div>
+                         <div class="form-group">
+                             <label>Faz dieta? Como é sua dieta?</label>
+                             <input type="text" id="corp-diet" name="corp_diet">
+                         </div>
+                         <div class="form-group">
+                            <label>Acompanhamento Médico ou Nutricional?</label>
+                            <input type="text" id="corp-med-followup" name="corp_med_followup">
+                        </div>
+                        <div class="form-group">
+                            <label>Apresenta horários alimentares?</label>
+                             <input type="text" id="corp-eating-schedule" name="corp_eating_schedule">
+                        </div>
+                         <div class="form-group">
+                             <label>Faz ingestão de refrigerantes? Quanto?</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="corp_soda_freq" value="Pouco"> Pouco</label>
+                                 <label><input type="radio" name="corp_soda_freq" value="Moderado"> Moderado</label>
+                                 <label><input type="radio" name="corp_soda_freq" value="Muito"> Muito</label>
+                                 <label><input type="radio" name="corp_soda_freq" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Faz ingestão de água? Quanto?</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="corp_water_freq" value="Pouco"> Pouco</label>
+                                 <label><input type="radio" name="corp_water_freq" value="Moderado"> Moderado</label>
+                                 <label><input type="radio" name="corp_water_freq" value="Muito"> Muito</label>
+                             </div>
+                         </div>
+                     </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Sistema Cardíaco / Vascular</legend>
+                    <div class="form-grid">
+                         <div class="form-group">
+                             <label>Apresenta alterações cardíacas?</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="corp_cardiac_issues" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="corp_cardiac_issues" value="Não"> Não</label>
+                             </div>
+                         </div>
+                        <div class="form-group">
+                            <label>É portador de marca passo?</label>
+                            <div class="radio-group">
+                                 <label><input type="radio" name="corp_pacemaker" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="corp_pacemaker" value="Não"> Não</label>
+                             </div>
+                        </div>
+                         <div class="form-group">
+                             <label>É hipertenso (pressão alta)?</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="corp_hypertension" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="corp_hypertension" value="Não"> Não</label>
+                             </div>
+                         </div>
+                        <div class="form-group">
+                            <label>Apresenta alterações circulatórias?</label>
+                            <input type="text" id="corp_circulatory_issues_desc" name="corp_circulatory_issues_desc" placeholder="Descreva se houver">
+                        </div>
+                        <div class="form-group">
+                             <label>Possui algum destes?</label>
+                             <div class="checkbox-group">
+                                 <label><input type="checkbox" name="corp_circulatory_signs" value="Varizes"> Varizes</label>
+                                 <label><input type="checkbox" name="corp_circulatory_signs" value="Varicozes"> Varicozes</label>
+                                 <label><input type="checkbox" name="corp_circulatory_signs" value="Peso nas pernas"> Peso nas pernas</label>
+                                 <label><input type="checkbox" name="corp_circulatory_signs" value="Edemas"> Edemas</label>
+                                 <label><input type="checkbox" name="corp_circulatory_signs" value="Hematomas"> Hematomas</label>
+                                 <label><input type="checkbox" name="corp_circulatory_signs" value="Extremidade fria"> Extremidade fria</label>
+                             </div>
+                         </div>
+                    </div>
+                </fieldset>
+
+                 <fieldset>
+                    <legend>Sistema Gastrointestinal</legend>
+                    <div class="form-grid">
+                         <div class="form-group">
+                             <label>Como é a digestão?</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="corp_digestion" value="Rápida"> Rápida</label>
+                                 <label><input type="radio" name="corp_digestion" value="Lenta"> Lenta</label>
+                                 <label><input type="radio" name="corp_digestion" value="Normal"> Normal</label>
+                             </div>
+                         </div>
+                        <div class="form-group">
+                            <label>Apresenta problemas digestivos? Quais?</label>
+                            <div class="checkbox-group">
+                                 <label><input type="checkbox" name="corp_digestive_problems" value="Úlcera"> Úlcera</label>
+                                 <label><input type="checkbox" name="corp_digestive_problems" value="Gastrite"> Gastrite</label>
+                             </div>
+                             <input type="text" name="corp_digestive_problems_other" placeholder="Outros?">
+                        </div>
+                        <div class="form-group">
+                            <label>Já realizou Cirurgia Bariátrica? Qual? Foi inserido anel metálico? Quanto tempo?</label>
+                            <input type="text" id="corp_bariatric" name="corp_bariatric">
+                        </div>
+                        <div class="form-group">
+                             <label>Como é o funcionamento intestinal?</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="corp_intestinal_func" value="Normal"> Normal</label>
+                                 <label><input type="radio" name="corp_intestinal_func" value="Irregular"> Irregular</label>
+                                 <label><input type="radio" name="corp_intestinal_func" value="Preso"> Preso</label>
+                                 <label><input type="radio" name="corp_intestinal_func" value="Solto"> Solto</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Apresenta retenção de gases?</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="corp_gases" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="corp_gases" value="Não"> Não</label>
+                             </div>
+                         </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Sistema Respiratório e Alergias</legend>
+                    <div class="form-grid">
+                         <div class="form-group">
+                             <label>Apresenta problemas respiratórios? Quais?</label>
+                             <div class="checkbox-group">
+                                 <label><input type="checkbox" name="corp_resp_problems" value="Bronquite"> Bronquite</label>
+                                 <label><input type="checkbox" name="corp_resp_problems" value="Rinite"> Rinite</label>
+                                 <label><input type="checkbox" name="corp_resp_problems" value="Asma"> Asma</label>
+                             </div>
+                             <input type="text" name="corp_resp_problems_other" placeholder="Outros?">
+                         </div>
+                        <div class="form-group">
+                            <label>Possui Prótese metálica? Local?</label>
+                            <input type="text" id="corp_metal_prosthesis" name="corp_metal_prosthesis">
+                        </div>
+                        <div class="form-group">
+                             <label>Apresenta algum tipo de alergia?</label>
+                              <div class="checkbox-group">
+                                 <label><input type="checkbox" name="corp_allergies" value="Cosméticos"> Cosméticos</label>
+                                 <label><input type="checkbox" name="corp_allergies" value="Corrente elétrica"> Corrente elétrica</label>
+                                 <label><input type="checkbox" name="corp_allergies" value="Alimento"> Alimento</label>
+                                 <label><input type="checkbox" name="corp_allergies" value="Respiratória"> Respiratória</label>
+                             </div>
+                             <input type="text" name="corp_allergies_other" placeholder="Outros?">
+                         </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Histórico Médico e Tratamentos</legend>
+                     <div class="form-grid">
+                         <div class="form-group">
+                             <label>Realizou alguma cirurgia? Que cirurgia/local?</label>
+                             <input type="text" id="corp_surgery_history" name="corp_surgery_history">
+                         </div>
+                        <div class="form-group">
+                            <label>Apresentou Quelóide/cicatriz hipertrófica no local da cirurgia?</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="corp_keloid" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="corp_keloid" value="Não"> Não</label>
+                             </div>
+                        </div>
+                         <div class="form-group">
+                             <label>Está fazendo uso de algum medicamento? Qual?</label>
+                             <input type="text" id="corp_medication_use" name="corp_medication_use">
+                         </div>
+                         <div class="form-group">
+                             <label>Está fazendo tratamento Homeopático? Quanto tempo?</label>
+                             <input type="text" id="corp_homeopathic_tx" name="corp_homeopathic_tx">
+                         </div>
+                         <div class="form-group">
+                             <label>Está fazendo tratamento Ortomolecular? Quanto tempo?</label>
+                             <input type="text" id="corp_orthomolecular_tx" name="corp_orthomolecular_tx">
+                         </div>
+                         <div class="form-group">
+                             <label>Antecedentes Oncológico/câncer?</label>
+                             <input type="text" id="corp_cancer_history" name="corp_cancer_history">
+                         </div>
+                         <div class="form-group">
+                             <label>Neoplasia?</label>
+                             <input type="text" id="corp_neoplasia" name="corp_neoplasia">
+                         </div>
+                        <div class="form-group">
+                             <label>Está em tratamento oncológico? Qual local? Quanto tempo?</label>
+                             <input type="text" id="corp_cancer_tx" name="corp_cancer_tx">
+                         </div>
+                        <div class="form-group">
+                             <label>Já realizou algum tratamento estético? Qual? Obteve resultados?</label>
+                             <input type="text" id="corp_aesthetic_tx_history" name="corp_aesthetic_tx_history">
+                         </div>
+                        <div class="form-group">
+                             <label>Aspecto psicológico:</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="corp_psychological" value="Ansiosa"> Ansiosa</label>
+                                 <label><input type="radio" name="corp_psychological" value="Depressiva"> Depressiva</label>
+                                 <label><input type="radio" name="corp_psychological" value="Estressada"> Estressada</label>
+                                 <label><input type="radio" name="corp_psychological" value="Calma"> Calma</label>
+                                 <label><input type="radio" name="corp_psychological" value="Normal"> Normal</label>
+                             </div>
+                         </div>
+                     </div>
+                </fieldset>
+
+                <fieldset>
+                     <legend>Exame Físico</legend>
+                     <div class="form-grid">
+                        <div class="form-group">
+                            <label>IMC (Kg/M2):</label>
+                            <input type="number" step="0.1" id="corp_imc" name="corp_imc">
+                        </div>
+                         <div class="form-group">
+                            <label>Circunferência da Cintura (cm):</label>
+                            <input type="number" step="0.1" id="corp_waist_circ" name="corp_waist_circ">
+                        </div>
+                        <div class="form-group">
+                            <label>Circunferência do Quadril (cm):</label>
+                            <input type="number" step="0.1" id="corp_hip_circ" name="corp_hip_circ">
+                        </div>
+                         <div class="form-group">
+                             <label>RCQ (Relação Cintura-Quadril):</label>
+                             <input type="number" step="0.01" id="corp_rcq" name="corp_rcq" readonly> <!-- Calculado -->
+                         </div>
+                         <div class="form-group">
+                             <label>Biotipo:</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="corp_biotype" value="Central"> Central (andróide/maçã)</label>
+                                 <label><input type="radio" name="corp_biotype" value="Periférica"> Periférica (ginóide/pêra)</label>
+                                 <label><input type="radio" name="corp_biotype" value="Mista"> Mista</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Medidas de Circunferência (Outras):</label>
+                             <textarea id="corp_other_circ" name="corp_other_circ" placeholder="Ex: Braço D: 30cm, Coxa E: 55cm..."></textarea>
+                         </div>
+                         <div class="form-group">
+                             <label>Avaliação Postural:</label>
+                             <textarea id="corp_postural_eval" name="corp_postural_eval"></textarea>
+                         </div>
+                         <div class="form-group">
+                             <label>Diagnóstico (LDG - Lipodistrofia Ginóide):</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="corp_ldg_type" value="Flácida"> Flácida</label>
+                                 <label><input type="radio" name="corp_ldg_type" value="Dura"> Dura</label>
+                                 <label><input type="radio" name="corp_ldg_type" value="Edematosa"> Edematosa</label>
+                                 <label><input type="radio" name="corp_ldg_type" value="Mista"> Mista</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Estrias (Apresenta? Região? Coloração inicial/atual? Período aparecimento?)</label>
+                             <textarea id="corp_stretch_marks" name="corp_stretch_marks"></textarea>
+                             <div class="checkbox-group">
+                                 <label><input type="checkbox" name="corp_stretch_marks_period" value="Adolescência"> Adolescência</label>
+                                 <label><input type="checkbox" name="corp_stretch_marks_period" value="Gravidez"> Gravidez</label>
+                                 <label><input type="checkbox" name="corp_stretch_marks_period" value="Obesidade"> Obesidade</label>
+                             </div>
+                              <label><input type="checkbox" name="corp_stretch_marks_medication" value="Sim"> Uso de Medicamento</label>
+                         </div>
+                         <div class="form-group">
+                             <label>Flacidez (Grau? Tipo?)</label>
+                             <div class="radio-group">
+                                 <label>Grau:</label>
+                                 <label><input type="radio" name="corp_flaccidity_grade" value="Leve"> Leve</label>
+                                 <label><input type="radio" name="corp_flaccidity_grade" value="Moderada"> Moderada</label>
+                                 <label><input type="radio" name="corp_flaccidity_grade" value="Grave"> Grave</label>
+                             </div>
+                              <div class="radio-group">
+                                  <label>Tipo:</label>
+                                 <label><input type="radio" name="corp_flaccidity_type" value="Pele"> Pele</label>
+                                 <label><input type="radio" name="corp_flaccidity_type" value="Músculo"> Músculo</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Gordura Localizada (Regiões):</label>
+                             <input type="text" id="corp_localized_fat" name="corp_localized_fat">
+                         </div>
+                         <div class="form-group" style="grid-column: 1 / -1;"> <!-- Ocupa toda a largura -->
+                             <label>Tratamento Proposto:</label>
+                             <textarea id="corp_proposed_treatment" name="corp_proposed_treatment"></textarea>
+                         </div>
+                     </div>
+                 </fieldset>
+                 <!-- Adicionar aqui os campos restantes da ficha corporal -->
+            </section>
+
+            <!-- FICHA DE AVALIAÇÃO FACIAL -->
+             <section>
+                 <h3>FICHA DE AVALIAÇÃO FACIAL</h3>
+                 <fieldset>
+                     <legend>Identificação Pessoal</legend>
+                     <!-- Reutilizar dados se já preenchidos na corporal? Ou manter separado? Mantendo separado por enquanto -->
+                      <div class="form-grid">
+                         <div class="form-group">
+                             <label for="facial-name">Nome:</label>
+                             <input type="text" id="facial-name" name="facial_name">
+                         </div>
+                         <div class="form-group">
+                            <label>Sexo:</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="facial_sex" value="Feminino"> Feminino</label>
+                                 <label><input type="radio" name="facial_sex" value="Masculino"> Masculino</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label for="facial-birthdate">Data de Nascimento:</label>
+                             <input type="date" id="facial-birthdate" name="facial_birthdate">
+                         </div>
+                         <div class="form-group">
+                             <label for="facial-age">Idade:</label>
+                             <input type="number" id="facial-age" name="facial_age">
+                         </div>
+                     </div>
+                 </fieldset>
+
+                  <fieldset>
+                     <legend>Anamnese Facial</legend>
+                     <div class="form-group">
+                         <label>Queixa Principal:</label>
+                         <div class="checkbox-group">
+                             <label><input type="checkbox" name="facial_complaint" value="Acne-Espinhas"> Acne/Espinhas</label>
+                             <label><input type="checkbox" name="facial_complaint" value="Manchas"> Manchas</label>
+                             <label><input type="checkbox" name="facial_complaint" value="Comedões"> Comedões (Cravos)</label>
+                             <label><input type="checkbox" name="facial_complaint" value="Oleosidade"> Oleosidade</label>
+                             <label><input type="checkbox" name="facial_complaint" value="Cicatriz de Acne"> Cicatriz de Acne</label>
+                             <label><input type="checkbox" name="facial_complaint" value="Olheiras"> Olheiras</label>
+                             <label><input type="checkbox" name="facial_complaint" value="Edema de Face"> Edema de Face</label>
+                             <label><input type="checkbox" name="facial_complaint" value="Rugas/Linhas"> Rugas/Linhas</label>
+                             <label><input type="checkbox" name="facial_complaint" value="Flacidez Cutânea"> Flacidez Cutânea</label>
+                             <label><input type="checkbox" name="facial_complaint" value="Pele Desidratada"> Pele Desidratada</label>
+                         </div>
+                         <input type="text" name="facial_complaint_other" placeholder="Outra queixa?">
+                     </div>
+                     <div class="form-grid">
+                        <div class="form-group">
+                            <label>Faz uso de medicamentos? Qual(ais)?</label>
+                            <input type="text" id="facial_medication" name="facial_medication">
+                        </div>
+                         <div class="form-group">
+                            <label>Tem ou teve alguma destas disfunções?</label>
+                            <input type="text" id="facial_dysfunctions" name="facial_dysfunctions" placeholder="Ex: Melasma, Rosácea...">
+                        </div>
+                         <div class="form-group">
+                            <label>Alterações Vasculares?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_vascular" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_vascular" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                            <label>Faz uso de lentes de contato?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_contacts" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_contacts" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                            <label>Problemas de Cicatrização?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_scarring" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_scarring" value="Não"> Não</label>
+                             </div>
+                         </div>
+                          <div class="form-group">
+                            <label>Problemas Cardíacos(as)?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_cardiac" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_cardiac" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                            <label>Portador de pino ou marca passo?</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="facial_pacemaker_pin" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_pacemaker_pin" value="Não"> Não</label>
+                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Portador de próteses metálicas?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_metal_prosthesis" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_metal_prosthesis" value="Não"> Não</label>
+                             </div>
+                        </div>
+                         <div class="form-group">
+                            <label>Propenso a queloide?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_keloid_prone" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_keloid_prone" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                            <label>Têm diabetes?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_diabetes" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_diabetes" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                            <label>Hipertensão?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_hypertension" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_hypertension" value="Não"> Não</label>
+                             </div>
+                         </div>
+                          <div class="form-group">
+                            <label>Hipotensão?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_hypotension" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_hypotension" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                            <label>Hipertireoidismo?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_hyperthyroidism" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_hyperthyroidism" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                            <label>Hipotireoidismo?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_hypothyroidism" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_hypothyroidism" value="Não"> Não</label>
+                             </div>
+                         </div>
+                          <div class="form-group">
+                            <label>Epilético(a)?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_epileptic" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_epileptic" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                            <label>Insuficiência Renal?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_renal_failure" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_renal_failure" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                            <label>Hereditariedade ao câncer?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_cancer_hereditary" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_cancer_hereditary" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                            <label>Neoplasia?</label>
+                             <div class="radio-group">
+                                <label><input type="radio" name="facial_neoplasia" value="Sim"> Sim</label>
+                                <label><input type="radio" name="facial_neoplasia" value="Não"> Não</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                            <label>Tem algum tipo de alergia? Qual?</label>
+                            <input type="text" id="facial_allergy_type" name="facial_allergy_type">
+                        </div>
+                        <div class="form-group">
+                            <label>Como é o seu aspecto psicológico?</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="facial_psychological" value="Depressivo"> Depressivo</label>
+                                <label><input type="radio" name="facial_psychological" value="Ansioso"> Ansioso</label>
+                                 <label><input type="radio" name="facial_psychological" value="Normal"> Normal</label>
+                            </div>
+                        </div>
+                     </div>
+                 </fieldset>
+
+                 <fieldset>
+                     <legend>Hábitos</legend>
+                      <div class="form-grid">
+                         <div class="form-group">
+                             <label>Toma água? Quanto?</label>
+                             <input type="text" id="facial_water_intake" name="facial_water_intake">
+                         </div>
+                          <div class="form-group">
+                             <label>É tabagista? Média diária?</label>
+                             <input type="text" id="facial_smoker_avg" name="facial_smoker_avg">
+                         </div>
+                          <div class="form-group">
+                             <label>É etilista? Média?</label>
+                             <input type="text" id="facial_alcohol_avg" name="facial_alcohol_avg">
+                         </div>
+                          <div class="form-group">
+                             <label>Apresenta uma alimentação regular?</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="facial_regular_diet" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="facial_regular_diet" value="Não"> Não</label>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                             <label>Faz algum tipo de dieta?</label>
+                              <input type="text" id="facial_diet_type" name="facial_diet_type">
+                          </div>
+                          <div class="form-group">
+                             <label>Usa algum tipo de medicamento para emagrecer?</label>
+                              <input type="text" id="facial_weightloss_med" name="facial_weightloss_med">
+                          </div>
+                          <div class="form-group">
+                             <label>Tem sono tranquilo?</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="facial_good_sleep" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="facial_good_sleep" value="Não"> Não</label>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                             <label>Pratica atividade física? Qual? E a frequência?</label>
+                             <input type="text" id="facial_physical_activity" name="facial_physical_activity">
+                          </div>
+                          <div class="form-group">
+                             <label>Costuma Tomar Sol?</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="facial_sun_exposure" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="facial_sun_exposure" value="Não"> Não</label>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                             <label>Já fez bronzeamento artificial?</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="facial_artificial_tanning" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="facial_artificial_tanning" value="Não"> Não</label>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                             <label>Utiliza protetor solar? Qual FPS e a Marca?</label>
+                             <input type="text" id="facial_sunscreen" name="facial_sunscreen">
+                          </div>
+                           <div class="form-group">
+                             <label>Utiliza maquiagem? Qual a frequência? O que utiliza para remover?</label>
+                              <input type="text" id="facial_makeup" name="facial_makeup">
+                          </div>
+                           <div class="form-group">
+                             <label>Utiliza algum produto cosmético? Qual (s)?</label>
+                              <input type="text" id="facial_cosmetics" name="facial_cosmetics">
+                          </div>
+                           <div class="form-group">
+                             <label>Botox? Desde quando?</label>
+                              <input type="text" id="facial_botox" name="facial_botox">
+                          </div>
+                           <div class="form-group">
+                             <label>Já realizou algum tratamento facial anteriormente? Quais? Nível de satisfação:</label>
+                              <input type="text" id="facial_prev_treatment" name="facial_prev_treatment">
+                          </div>
+                           <div class="form-group">
+                             <label>Já realizou algum tipo de cirurgia facial? Qual (ais)?</label>
+                             <input type="text" id="facial_prev_surgery" name="facial_prev_surgery">
+                          </div>
+                     </div>
+                 </fieldset>
+
+                  <fieldset>
+                     <legend>Exame Visual e Palpatório da Face</legend>
+                     <div class="form-grid">
+                         <div class="form-group">
+                             <label>Tom da pele:</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="facial_skin_tone" value="Branco"> Branco</label>
+                                 <label><input type="radio" name="facial_skin_tone" value="Negro"> Negro</label>
+                                 <label><input type="radio" name="facial_skin_tone" value="Amarelo"> Amarelo</label>
+                                 <label><input type="radio" name="facial_skin_tone" value="Moreno"> Moreno</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Pilosidade:</label>
+                              <div class="checkbox-group">
+                                 <label><input type="checkbox" name="facial_pilosity" value="Face"> Face</label>
+                                 <label><input type="checkbox" name="facial_pilosity" value="Buço"> Buço</label>
+                                 <label><input type="checkbox" name="facial_pilosity" value="Pescoço"> Pescoço</label>
+                              </div>
+                             <input type="text" name="facial_pilosity_other" placeholder="Outros">
+                         </div>
+                         <div class="form-group">
+                             <label>Espessura da pele (teor hídrico-lipídico):</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="facial_skin_thickness" value="Normal"> Normal</label>
+                                 <label><input type="radio" name="facial_skin_thickness" value="Oleosa"> Oleosa</label>
+                                 <label><input type="radio" name="facial_skin_thickness" value="Seca"> Seca</label>
+                                 <label><input type="radio" name="facial_skin_thickness" value="Mista"> Mista</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Classificação da pele (aparência):</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="facial_skin_appearance" value="Jovem"> Jovem</label>
+                                 <label><input type="radio" name="facial_skin_appearance" value="Desvitalizada"> Desvitalizada</label>
+                                 <label><input type="radio" name="facial_skin_appearance" value="Foto-envelhecida"> Foto-envelhecida</label>
+                             </div>
+                         </div>
+                          <div class="form-group">
+                             <label>Condições dos óstios:</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="facial_ostia" value="Normais"> Normais</label>
+                                 <label><input type="radio" name="facial_ostia" value="Dilatados"> Dilatados</label>
+                                 <label><input type="radio" name="facial_ostia" value="Diminutos"> Diminutos</label>
+                             </div>
+                             <label><input type="checkbox" name="facial_ostia_zonat" value="Sim"> Dilatados em Zona T</label>
+                         </div>
+                         <div class="form-group">
+                             <label>Grau da oleosidade da pele:</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="facial_oiliness_grade" value="Excesso"> Excesso</label>
+                                 <label><input type="radio" name="facial_oiliness_grade" value="Falta"> Falta</label>
+                                 <label><input type="radio" name="facial_oiliness_grade" value="Mista"> Mista</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Possui acne?</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="facial_has_acne" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="facial_has_acne" value="Não"> Não</label>
+                              </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Grau de Acne:</label>
+                             <select name="facial_acne_grade">
+                                 <option value="">Selecione...</option>
+                                 <option value="I">GRAU I: Comedogênica</option>
+                                 <option value="II">GRAU II: Pápulo-Pustulosa</option>
+                                 <option value="III">GRAU III: Nódulo-Cística</option>
+                                 <option value="IV">GRAU IV: Conglobata</option>
+                                 <option value="V">GRAU V: Fulminans</option>
+                             </select>
+                         </div>
+                         <div class="form-group">
+                             <label>Presença de:</label>
+                             <div class="checkbox-group" style="flex-direction: column; align-items: flex-start;">
+                                 <label><input type="checkbox" name="facial_presence" value="Comedões Abertos"> Comedões Abertos</label>
+                                 <label><input type="checkbox" name="facial_presence" value="Pústulas"> Pústulas</label>
+                                 <label><input type="checkbox" name="facial_presence" value="Abscessos"> Abscessos</label>
+                                 <label><input type="checkbox" name="facial_presence" value="Verrugas"> Verrugas</label>
+                                 <label><input type="checkbox" name="facial_presence" value="Nódulos"> Nódulos</label>
+                                 <label><input type="checkbox" name="facial_presence" value="Comedões Fechados"> Comedões Fechados</label>
+                                 <label><input type="checkbox" name="facial_presence" value="Fístulas"> Fístulas</label>
+                                 <label><input type="checkbox" name="facial_presence" value="Telangiectasias"> Telangiectasias</label>
+                                 <label><input type="checkbox" name="facial_presence" value="Pápulas"> Pápulas</label>
+                                 <label><input type="checkbox" name="facial_presence" value="Cistos"> Cistos</label>
+                                 <label><input type="checkbox" name="facial_presence" value="Milium"> Milium</label>
+                                 <label><input type="checkbox" name="facial_presence" value="Rosácea"> Rosácea</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Presença de sequelas de acne?</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="facial_acne_scars" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="facial_acne_scars" value="Não"> Não</label>
+                             </div>
+                             <label>Cicatrizes Elevadas:</label>
+                             <div class="checkbox-group">
+                                 <label><input type="checkbox" name="facial_elevated_scars" value="Hipertróficas"> Hipertróficas</label>
+                                 <label><input type="checkbox" name="facial_elevated_scars" value="Queloidianas"> Queloidianas</label>
+                                 <label><input type="checkbox" name="facial_elevated_scars" value="Papulosas"> Papulosas</label>
+                                 <label><input type="checkbox" name="facial_elevated_scars" value="Pontes"> Pontes</label>
+                             </div>
+                             <label for="facial_elevated_scars_regions">Regiões:</label>
+                             <input type="text" id="facial_elevated_scars_regions" name="facial_elevated_scars_regions">
+
+                             <label>Cicatrizes Distróficas (Regiões):</label>
+                              <input type="text" id="facial_distrophic_scars_regions" name="facial_distrophic_scars_regions">
+
+                             <label>Cicatrizes Deprimidas Distensíveis:</label>
+                              <div class="checkbox-group">
+                                 <label><input type="checkbox" name="facial_depressed_dist" value="Ondulações/Vales"> Ondulações/Vales</label>
+                                 <label><input type="checkbox" name="facial_depressed_dist" value="Retraídas"> Retraídas</label>
+                              </div>
+                               <label for="facial_depressed_dist_regions">Regiões:</label>
+                             <input type="text" id="facial_depressed_dist_regions" name="facial_depressed_dist_regions">
+
+                             <label>Cicatrizes Deprimidas Não-Distensíveis:</label>
+                              <div class="checkbox-group">
+                                 <label><input type="checkbox" name="facial_depressed_non_dist" value="Superficiais"> Superficiais</label>
+                                 <label><input type="checkbox" name="facial_depressed_non_dist" value="Médias/Crateriformes"> Médias/Crateriformes</label>
+                                  <label><input type="checkbox" name="facial_depressed_non_dist" value="Profundas Fibróticas"> Profundas Fibróticas</label>
+                              </div>
+                              <label for="facial_depressed_non_dist_regions">Regiões:</label>
+                             <input type="text" id="facial_depressed_non_dist_regions" name="facial_depressed_non_dist_regions">
+                         </div>
+
+                         <div class="form-group">
+                             <label>Elasticidade:</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="facial_elasticity" value="Normal"> Normal</label>
+                                 <label><input type="radio" name="facial_elasticity" value="Comprometida"> Comprometida</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Presença de rugas?</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="facial_wrinkles" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="facial_wrinkles" value="Não"> Não</label>
+                             </div>
+                              <label>Classificação:</label>
+                             <div class="checkbox-group">
+                                 <label><input type="checkbox" name="facial_wrinkle_type" value="Horizontais"> Horizontais</label>
+                                 <label><input type="checkbox" name="facial_wrinkle_type" value="Verticais"> Verticais</label>
+                                 <label><input type="checkbox" name="facial_wrinkle_type" value="Oblíquas"> Oblíquas</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Tugor:</label>
+                             <div class="radio-group">
+                                 <label><input type="radio" name="facial_tugor" value="Hidratada"> Hidratada</label>
+                                 <label><input type="radio" name="facial_tugor" value="Desidratada"> Desidratada</label>
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label>Presença de Discromias?</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="facial_dyschromia" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="facial_dyschromia" value="Não"> Não</label>
+                              </div>
+                               <div class="checkbox-group">
+                                 <label><input type="checkbox" name="facial_dyschromia_type" value="Hipocrômicas"> Manchas Hipocrômicas</label>
+                                 <label><input type="checkbox" name="facial_dyschromia_type" value="Hipercrômicas"> Manchas Hipercrômicas</label>
+                                 <label><input type="checkbox" name="facial_dyschromia_type" value="Melasmas/Cloasmas"> Melasmas/Cloasmas</label>
+                             </div>
+                             <label for="facial_dyschromia_regions">Regiões:</label>
+                             <input type="text" id="facial_dyschromia_regions" name="facial_dyschromia_regions">
+                         </div>
+                         <div class="form-group">
+                             <label>Presença de Dermatoelioses?</label>
+                              <div class="radio-group">
+                                 <label><input type="radio" name="facial_dermatoheliosis" value="Sim"> Sim</label>
+                                 <label><input type="radio" name="facial_dermatoheliosis" value="Não"> Não</label>
+                              </div>
+                               <div class="checkbox-group" style="flex-direction: column; align-items: flex-start;">
+                                 <label><input type="checkbox" name="facial_dermatoheliosis_type" value="Ceratose Solar/Actínica"> Ceratose Solar/Actínica</label>
+                                 <label><input type="checkbox" name="facial_dermatoheliosis_type" value="Leucodermia Gutada"> Leucodermia Gutada</label>
+                                 <label><input type="checkbox" name="facial_dermatoheliosis_type" value="Efélides"> Efélides</label>
+                                 <label><input type="checkbox" name="facial_dermatoheliosis_type" value="Melanose Solar"> Melanose Solar</label>
+                                 <label><input type="checkbox" name="facial_dermatoheliosis_type" value="Lentigos"> Lentigos</label>
+                                 <label><input type="checkbox" name="facial_dermatoheliosis_type" value="Pitiríase Versicolor"> Pitiríase Versicolor</label>
+                             </div>
+                             <label for="facial_dermatoheliosis_regions">Regiões:</label>
+                             <input type="text" id="facial_dermatoheliosis_regions" name="facial_dermatoheliosis_regions">
+                         </div>
+                          <div class="form-group" style="grid-column: 1 / -1;">
+                             <label>Tratamentos Propostos:</label>
+                             <textarea id="facial_proposed_treatment" name="facial_proposed_treatment"></textarea>
+                         </div>
+                         <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>Objetivo do Tratamento:</label>
+                            <textarea id="facial_treatment_goal" name="facial_treatment_goal"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Recursos Eletroterápicos:</label>
+                             <div class="checkbox-group" style="flex-direction: column; align-items: flex-start;">
+                                <label><input type="checkbox" name="facial_electro_resources" value="Alta Frequência"> Alta Frequência</label>
+                                <label><input type="checkbox" name="facial_electro_resources" value="Microcorrentes"> Microcorrentes</label>
+                                <label><input type="checkbox" name="facial_electro_resources" value="Desincruste"> Desincruste</label>
+                                <label><input type="checkbox" name="facial_electro_resources" value="Peeling Cristal"> Peeling Cristal</label>
+                                <label><input type="checkbox" name="facial_electro_resources" value="Eletrolifting"> Eletrolifting</label>
+                                <label><input type="checkbox" name="facial_electro_resources" value="Peeling Diamante"> Peeling Diamante</label>
+                                <label><input type="checkbox" name="facial_electro_resources" value="Eletroporação"> Eletroporação</label>
+                                <label><input type="checkbox" name="facial_electro_resources" value="Tonificação Muscular"> Tonificação Muscular</label>
+                                <label><input type="checkbox" name="facial_electro_resources" value="Ionização"> Ionização</label>
+                                <label><input type="checkbox" name="facial_electro_resources" value="Vapor de Ozônio"> Vapor de Ozônio</label>
+                                <label><input type="checkbox" name="facial_electro_resources" value="Radiofrequência"> Radiofrequência</label>
+                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Técnicas Manuais:</label>
+                            <div class="checkbox-group" style="flex-direction: column; align-items: flex-start;">
+                                <label><input type="checkbox" name="facial_manual_techniques" value="Drenagem Linfática Facial"> Drenagem Linfática Facial</label>
+                                <label><input type="checkbox" name="facial_manual_techniques" value="Massagem Modeladora Facial"> Massagem Modeladora Facial</label>
+                                <label><input type="checkbox" name="facial_manual_techniques" value="Bambuterapia"> Bambuterapia</label>
+                                <label><input type="checkbox" name="facial_manual_techniques" value="Limpeza de Pele"> Limpeza de Pele</label>
+                                <label><input type="checkbox" name="facial_manual_techniques" value="Hidratação Cutânea"> Hidratação Cutânea</label>
+                                <label><input type="checkbox" name="facial_manual_techniques" value="Controle de Acne"> Controle de Acne</label>
+                                <label><input type="checkbox" name="facial_manual_techniques" value="Controle de Oleosidade"> Controle de Oleosidade</label>
+                                <label><input type="checkbox" name="facial_manual_techniques" value="Revitalização Facial"> Revitalização Facial</label>
+                                <label><input type="checkbox" name="facial_manual_techniques" value="Pré-Operatório"> Pré-Operatório</label>
+                                <label><input type="checkbox" name="facial_manual_techniques" value="Pós-Operatório"> Pós-Operatório</label>
+                                <label><input type="checkbox" name="facial_manual_techniques" value="Hipercromia"> Hipercromia</label>
+                            </div>
+                        </div>
+                     </div>
+                 </fieldset>
+             </section>
+
+            <div class="action-buttons no-print">
+                <button type="button" id="clear-form">Nova Ficha</button>
+                <button type="submit">Salvar Ficha</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="patient-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button no-print">&times;</span>
+            <h2 id="modal-patient-name">Nome do Paciente</h2>
+
+            <div id="modal-patient-data">
+                <!-- Patient data will be loaded here dynamically -->
+                <p>Carregando dados...</p>
+            </div>
+
+            <div id="modal-treatment-tracker">
+                <h3>Histórico de Tratamentos</h3>
+                <div class="add-treatment-form no-print">
+                    <div class="form-group">
+                        <label for="new-treatment-name">Nome do Tratamento:</label>
+                        <input type="text" id="new-treatment-name" placeholder="Ex: Limpeza de Pele">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-treatment-date">Data:</label>
+                        <input type="date" id="new-treatment-date">
+                    </div>
+                    <button id="add-treatment-button">Adicionar Tratamento</button>
+                </div>
+                <ul id="treatment-list">
+                    <!-- Treatment history will be listed here -->
+                </ul>
+            </div>
+
+             <div class="modal-actions no-print">
+                 <button id="edit-patient-button">Editar Ficha</button>
+                 <button id="delete-patient-button">Excluir Ficha</button>
+             </div>
+
+        </div>
+    </div>
+
+    <!-- Hidden Div for Printing Consent -->
+    <div id="printable-consent">
+        <h2>TERMO DE CONSENTIMENTO INFORMADO PARA PROCEDIMENTO ESTÉTICO</h2>
+
+        <p>EU, <strong id="print-patient-name">[Nome do Paciente]</strong>, RG <strong id="print-patient-rg">[RG do Paciente]</strong>,</p>
+
+        <div id="print-consent-text">
+            <!-- Full consent text loaded here -->
+        </div>
+
+        <p>Tratamento específico a ser realizado: <strong id="print-treatment-name">[Nome do Tratamento]</strong></p>
+
+        <p>Assim, o faço por livre e espontânea vontade.</p>
+
+        <div class="signatures">
+             <p>Data: <span id="print-consent-date">[Data]</span></p>
+            <br><br>
+            <div class="signature-line"></div>
+            <p class="signature-label">Assinatura do Cliente ou Responsável Legal</p>
+            <br><br><br>
+             <div class="signature-line"></div>
+             <p class="signature-label">Assinatura do Profissional (Eliane da Silva Paulo)</p>
+        </div>
+    </div>
+
+
+    <script>
+        // --- Constants ---
+        const PATIENT_DB_KEY = 'aestheticPatientsDB_v2'; // Changed key to avoid conflicts with old versions
+        const FULL_CONSENT_TEXT = `
+            DECLARO TER SIDO INFORMADO(A) CLARAMENTE E CIENTE SOBRE TODOS OS BENEFÍCIOS, OS RISCOS, AS INDICAÇÕES, CONTRA-INDICAÇÕES, PRINCIPAIS EFEITOS COLATERAIS E ADVERTÊNCIAS GERAIS, RELACIONADOS AO TRATAMENTO INDICADO ACIMA.
+            OS TERMOS FORAM EXPLICADOS E TODA AS MINHAS DÚVIDAS FORAM ESCLARECIDAS POR ELIANE DA SILVA PAULO, QUE É A PROFISSIONAL QUE CONDUZIRÁ TODO PROCEDIMENTO.
+            COMPROMETO-ME A SEGUIR TODAS AS ORIENTAÇÕES, INSENTANDO NESTE ATO A PROFISSIONAL DE ESTÉTICA ENVOLVIDA NO PROCEDIMENTO, NAS HIPÓTESES DE MINHA CULPA EXCLUSIVA.
+            REGISTRO TAMBÉM, QUE NESTE ATO, RECEBI TODAS INTRUÇÕES PÓS-EVENTO QUE DEVO SEGUIR EM CONTINUIDADE AO TRATAMENTO PARA QUE POSSA OBTER RESULTADO SATISFATÓRIO, BEM COMO TENHO CIÊNCIA DE QUE ESTA OBRIGAÇÃO DE RESULTADOS ESTÁ SUBORDINADA AO MEU COMPORTAMENTO E DISCIPLINA APÓS O TRATAMENTO ESTÉTICO.
+            ESPRESSO TAMBÉM MINHA CONCORDÂNCIA E ESPONTÂNEA VONTADE EM SUBMETER-ME AO REFERIDO TRATAMENTO, ASSUMINDO A RESPONSABILIDADE E OS RISCOS PELOS EVENTUAIS EFEITOS INDESEJÁVEIS DECORRETES.
+        `; // Store the full consent text here
+
+        // --- DOM Elements ---
+        const form = document.getElementById('patient-form');
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const clearFormButton = document.getElementById('clear-form');
+        const modal = document.getElementById('patient-details-modal');
+        const modalContent = modal.querySelector('.modal-content');
+        const closeModalButton = modal.querySelector('.close-button');
+        const modalPatientName = document.getElementById('modal-patient-name');
+        const modalPatientData = document.getElementById('modal-patient-data');
+        const modalTreatmentTracker = document.getElementById('modal-treatment-tracker');
+        const addTreatmentButton = document.getElementById('add-treatment-button');
+        const newTreatmentNameInput = document.getElementById('new-treatment-name');
+        const newTreatmentDateInput = document.getElementById('new-treatment-date');
+        const treatmentListUl = document.getElementById('treatment-list');
+        const editPatientButton = document.getElementById('edit-patient-button');
+        const deletePatientButton = document.getElementById('delete-patient-button');
+        const editingPatientIdInput = document.getElementById('editing-patient-id');
+        const printConsentBtn = document.getElementById('print-consent-btn');
+        const consentFullTextDiv = document.querySelector('.consent-full-text');
+        const printableConsentDiv = document.getElementById('printable-consent');
+        const printPatientNameSpan = document.getElementById('print-patient-name');
+        const printPatientRgSpan = document.getElementById('print-patient-rg');
+        const printConsentTextDiv = document.getElementById('print-consent-text');
+        const printTreatmentNameSpan = document.getElementById('print-treatment-name');
+        const printConsentDateSpan = document.getElementById('print-consent-date');
+
+        // --- State ---
+        let currentPatientId = null; // Store the ID of the patient being viewed/edited in modal
+
+        // --- Utility Functions ---
+
+        // Format date as DD/MM/YYYY
+        function formatDateBR(isoDateString) {
+            if (!isoDateString || isoDateString.length < 10) return '';
+            // Handles both 'YYYY-MM-DD' and potential 'YYYY-MM-DDTHH:mm:ss...'
+             const datePart = isoDateString.substring(0, 10);
+             const [year, month, day] = datePart.split('-');
+             // Check if parts are valid before joining
+             if (day && month && year) {
+                 return `${day}/${month}/${year}`;
+             }
+             return isoDateString; // Return original if parsing fails
+        }
+
+        // Get patient database from local storage
+        function getPatientDB() {
+            const db = localStorage.getItem(PATIENT_DB_KEY);
+            return db ? JSON.parse(db) : {};
+        }
+
+        // Save patient database to local storage
+        function savePatientDB(db) {
+            localStorage.setItem(PATIENT_DB_KEY, JSON.stringify(db));
+        }
+
+        // Generate a simple unique ID (for demo; consider UUID library for production)
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substring(2);
+        }
+
+        // Collect form data into an object
+        function getFormData() {
+            const formData = new FormData(form);
+            const data = {};
+            for (const [key, value] of formData.entries()) {
+                 // Handle checkboxes - collect multiple values into an array
+                if (form.elements[key] && form.elements[key].type === 'checkbox') {
+                    if (!data[key]) {
+                        data[key] = [];
+                    }
+                    data[key].push(value);
+                } else {
+                    data[key] = value;
+                }
+            }
+             // Ensure treatments array exists, preserve if editing
+             const editingId = editingPatientIdInput.value;
+             if (editingId) {
+                 const db = getPatientDB();
+                 data.treatments = db[editingId]?.treatments || [];
+             } else {
+                 data.treatments = []; // Initialize for new patient
+             }
+            return data;
+        }
+
+         // Populate the form with patient data for editing
+         function populateForm(patientData) {
+             clearForm(); // Clear first
+             editingPatientIdInput.value = patientData.id || ''; // Set editing ID
+
+             for (const key in patientData) {
+                 const element = form.elements[key];
+                 if (element) {
+                     // Handle radio buttons
+                     if (element.length && element[0]?.type === 'radio') {
+                         for (let i = 0; i < element.length; i++) {
+                             if (element[i].value === patientData[key]) {
+                                 element[i].checked = true;
+                                 break;
+                             }
+                         }
+                     }
+                     // Handle checkboxes
+                     else if (element.length && element[0]?.type === 'checkbox') {
+                          const values = Array.isArray(patientData[key]) ? patientData[key] : [patientData[key]];
+                          for (let i = 0; i < element.length; i++) {
+                             element[i].checked = values.includes(element[i].value);
+                         }
+                     }
+                     // Handle single checkbox
+                     else if (element.type === 'checkbox') {
+                          element.checked = !!patientData[key]; // Check if value is truthy (e.g., "Sim", "on")
+                     }
+                     // Handle other input types
+                     else {
+                         element.value = patientData[key] || '';
+                     }
+                 } else {
+                     // Handle cases where multiple checkboxes share the same name
+                     const elements = form.querySelectorAll(`[name="${key}"]`);
+                     if (elements.length > 0 && elements[0].type === 'checkbox') {
+                         const values = Array.isArray(patientData[key]) ? patientData[key] : [patientData[key]];
+                         elements.forEach(chk => {
+                             chk.checked = values.includes(chk.value);
+                         });
+                     }
+                 }
+             }
+
+             // Specific handling for consent fields if needed (often matches other name fields)
+             if(!form.elements['consent-patient-name'].value && patientData.corp_name) {
+                 form.elements['consent-patient-name'].value = patientData.corp_name;
+             }
+            if(!form.elements['consent-patient-name'].value && patientData.facial_name) {
+                 form.elements['consent-patient-name'].value = patientData.facial_name;
+             }
+
+             // Sync RG if available
+             const rgValue = patientData.corp_rg || '';
+             if (rgValue && form.elements['corp-rg']) {
+                form.elements['corp-rg'].value = rgValue;
+             }
+
+             // Set today's date for consent if not set
+             if (!form.elements['consent-date'].value) {
+                 form.elements['consent-date'].valueAsDate = new Date();
+             }
+
+             calculateRCQ(); // Recalculate RCQ on load if needed
+         }
+
+        // Clear the form fields and reset editing state
+        function clearForm() {
+            form.reset();
+            editingPatientIdInput.value = ''; // Clear editing ID
+            currentPatientId = null;
+             // Set today's date for consent
+            form.elements['consent-date'].valueAsDate = new Date();
+        }
+
+         // Calculate RCQ (Waist-Hip Ratio)
+         function calculateRCQ() {
+            const waistInput = document.getElementById('corp_waist_circ');
+            const hipInput = document.getElementById('corp_hip_circ');
+            const rcqInput = document.getElementById('corp_rcq');
+
+            if (waistInput && hipInput && rcqInput) {
+                const waist = parseFloat(waistInput.value);
+                const hip = parseFloat(hipInput.value);
+
+                if (waist > 0 && hip > 0) {
+                    rcqInput.value = (waist / hip).toFixed(2);
+                } else {
+                    rcqInput.value = '';
+                }
+            }
+         }
+
+         // --- Display Patient Data in Modal (Organized) ---
+         function displayPatientDetailsInModal(patientData) {
+             if (!patientData) {
+                 modalPatientData.innerHTML = '<p>Paciente não encontrado.</p>';
+                 modalPatientName.textContent = 'Erro';
+                 treatmentListUl.innerHTML = ''; // Clear treatments
+                 return;
+             }
+
+             currentPatientId = patientData.id; // Set current patient for modal actions
+             modalPatientName.textContent = patientData.corp_name || patientData.facial_name || 'Detalhes do Paciente';
+             modalPatientData.innerHTML = ''; // Clear previous data
+
+             // --- Helper to add data section ---
+             const addSection = (title, dataObject, keysToShow) => {
+                 let content = '';
+                 let sectionHasData = false;
+                 keysToShow.forEach(keyInfo => {
+                     const key = keyInfo.key;
+                     const label = keyInfo.label;
+                     let value = dataObject[key];
+
+                     if (value !== undefined && value !== null && value !== '' && (!Array.isArray(value) || value.length > 0)) {
+                         sectionHasData = true;
+                         // Format arrays (checkboxes)
+                         if (Array.isArray(value)) {
+                             value = value.join(', ');
+                         }
+                         // Format dates
+                         if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value.substring(0,10))) {
+                              value = formatDateBR(value);
+                         }
+                         // Format boolean-like values (radio/single checkbox)
+                         if (value === 'Sim' || value === true || value === 'on') value = 'Sim';
+                         if (value === 'Não' || value === false) value = 'Não';
+
+                         content += `<p><strong>${label}:</strong> ${value}</p>`;
+                     }
+                 });
+
+                 if (sectionHasData) {
+                     modalPatientData.innerHTML += `<h4>${title}</h4>${content}`;
+                 }
+             };
+
+             // --- Define Keys and Labels for Each Section ---
+             const consentKeys = [
+                 { key: 'consent_patient_name', label: 'Nome (Consentimento)' },
+                 { key: 'corp_rg', label: 'RG' }, // Assume RG from corporeal
+                 { key: 'consent_treatment', label: 'Tratamento Consentido' },
+                 { key: 'consent_date', label: 'Data Consentimento' },
+             ];
+
+             const personalKeys = [
+                 { key: 'corp_name', label: 'Nome' },
+                 { key: 'corp_ethnicity', label: 'Etnia' },
+                 { key: 'corp_birthdate', label: 'Nascimento' },
+                 { key: 'corp_age', label: 'Idade' },
+                 { key: 'corp_sex', label: 'Sexo' },
+                 { key: 'corp_address', label: 'Endereço' },
+                 { key: 'corp_city', label: 'Cidade' },
+                 { key: 'corp_phone', label: 'Telefone' },
+                 // Add facial data if different or not present in corporeal
+                 { key: 'facial_name', label: 'Nome (Facial)'}, // Only show if different?
+                 { key: 'facial_birthdate', label: 'Nascimento (Facial)'},
+                 { key: 'facial_age', label: 'Idade (Facial)'},
+                 { key: 'facial_sex', label: 'Sexo (Facial)'},
+             ];
+
+             const anamnesisCorpKeys = [
+                 { key: 'corp_main_complaint', label: 'Queixa Principal (Corp)' },
+                 { key: 'corp_alcohol', label: 'Ingere Álcool?' },
+                 { key: 'corp_smoker', label: 'Fumante?' },
+                 { key: 'corp_metal', label: 'Metal no Corpo?' },
+                 { key: 'corp_physical_activity', label: 'Atividade Física' },
+                 { key: 'corp_sleep', label: 'Dorme Bem?' },
+                 { key: 'corp_diet_restrictions', label: 'Restrições Alimentares' },
+                 { key: 'corp_diet', label: 'Dieta' },
+                 { key: 'corp_med_followup', label: 'Acomp. Médico/Nutri?' },
+                 { key: 'corp_eating_schedule', label: 'Horários Alimentares?' },
+                 { key: 'corp_soda_freq', label: 'Freq. Refrigerantes' },
+                 { key: 'corp_water_freq', label: 'Freq. Água' },
+             ];
+
+             const cardioKeys = [
+                { key: 'corp_cardiac_issues', label: 'Alterações Cardíacas?' },
+                { key: 'corp_pacemaker', label: 'Marca Passo?' },
+                { key: 'corp_hypertension', label: 'Hipertenso?' },
+                { key: 'corp_circulatory_issues_desc', label: 'Alterações Circulatórias' },
+                { key: 'corp_circulatory_signs', label: 'Sinais Circulatórios' },
+             ];
+
+             const gastroKeys = [
+                 { key: 'corp_digestion', label: 'Digestão' },
+                 { key: 'corp_digestive_problems', label: 'Problemas Digestivos' },
+                 { key: 'corp_digestive_problems_other', label: 'Outros Problemas Digestivos' },
+                 { key: 'corp_bariatric', label: 'Cirurgia Bariátrica?' },
+                 { key: 'corp_intestinal_func', label: 'Func. Intestinal' },
+                 { key: 'corp_gases', label: 'Retenção Gases?' },
+             ];
+
+              const respAllergyKeys = [
+                 { key: 'corp_resp_problems', label: 'Problemas Respiratórios' },
+                 { key: 'corp_resp_problems_other', label: 'Outros Prob. Respiratórios' },
+                 { key: 'corp_metal_prosthesis', label: 'Prótese Metálica (Corp)?' },
+                 { key: 'corp_allergies', label: 'Alergias (Corp)' },
+                 { key: 'corp_allergies_other', label: 'Outras Alergias (Corp)' },
+             ];
+
+             const historyCorpKeys = [
+                { key: 'corp_surgery_history', label: 'Histórico Cirúrgico' },
+                { key: 'corp_keloid', label: 'Quelóide/Cicatriz Hiper.' },
+                { key: 'corp_medication_use', label: 'Uso Medicamentos (Corp)' },
+                { key: 'corp_homeopathic_tx', label: 'Trat. Homeopático' },
+                { key: 'corp_orthomolecular_tx', label: 'Trat. Ortomolecular' },
+                { key: 'corp_cancer_history', label: 'Anteced. Oncológico' },
+                { key: 'corp_neoplasia', label: 'Neoplasia (Corp)?' },
+                { key: 'corp_cancer_tx', label: 'Trat. Oncológico Atual' },
+                { key: 'corp_aesthetic_tx_history', label: 'Hist. Trat. Estético' },
+                { key: 'corp_psychological', label: 'Aspecto Psicológico (Corp)' },
+             ];
+
+              const physicalExamKeys = [
+                 { key: 'corp_imc', label: 'IMC' },
+                 { key: 'corp_waist_circ', label: 'Circ. Cintura (cm)' },
+                 { key: 'corp_hip_circ', label: 'Circ. Quadril (cm)' },
+                 { key: 'corp_rcq', label: 'RCQ' },
+                 { key: 'corp_biotype', label: 'Biotipo' },
+                 { key: 'corp_other_circ', label: 'Outras Circunferências' },
+                 { key: 'corp_postural_eval', label: 'Aval. Postural' },
+                 { key: 'corp_ldg_type', label: 'Tipo LDG' },
+                 { key: 'corp_stretch_marks', label: 'Estrias Detalhes' },
+                 { key: 'corp_stretch_marks_period', label: 'Período Estrias' },
+                 { key: 'corp_stretch_marks_medication', label: 'Estrias (Medicamento?)'},
+                 { key: 'corp_flaccidity_grade', label: 'Grau Flacidez' },
+                 { key: 'corp_flaccidity_type', label: 'Tipo Flacidez' },
+                 { key: 'corp_localized_fat', label: 'Gordura Localizada' },
+                 { key: 'corp_proposed_treatment', label: 'Tratamento Proposto (Corp)' },
+             ];
+
+             const anamnesisFacialKeys = [
+                { key: 'facial_complaint', label: 'Queixa Principal (Facial)' },
+                { key: 'facial_complaint_other', label: 'Outra Queixa (Facial)' },
+                { key: 'facial_medication', label: 'Uso Medicamentos (Facial)' },
+                { key: 'facial_dysfunctions', label: 'Disfunções Faciais' },
+                { key: 'facial_vascular', label: 'Alterações Vasculares?' },
+                { key: 'facial_contacts', label: 'Usa Lentes Contato?' },
+                { key: 'facial_scarring', label: 'Problemas Cicatrização?' },
+                { key: 'facial_cardiac', label: 'Problemas Cardíacos?' },
+                { key: 'facial_pacemaker_pin', label: 'Marca Passo/Pino (Facial)?' },
+                { key: 'facial_metal_prosthesis', label: 'Prótese Metálica (Facial)?' },
+                { key: 'facial_keloid_prone', label: 'Propenso Queloide?' },
+                { key: 'facial_diabetes', label: 'Diabetes?' },
+                { key: 'facial_hypertension', label: 'Hipertensão (Facial)?' },
+                { key: 'facial_hypotension', label: 'Hipotensão?' },
+                { key: 'facial_hyperthyroidism', label: 'Hipertireoidismo?' },
+                { key: 'facial_hypothyroidism', label: 'Hipotireoidismo?' },
+                { key: 'facial_epileptic', label: 'Epilético?' },
+                { key: 'facial_renal_failure', label: 'Insuficiência Renal?' },
+                { key: 'facial_cancer_hereditary', label: 'Heredit. Câncer?' },
+                { key: 'facial_neoplasia', label: 'Neoplasia (Facial)?' },
+                { key: 'facial_allergy_type', label: 'Tipo Alergia (Facial)' },
+                { key: 'facial_psychological', label: 'Aspecto Psicológico (Facial)' },
+             ];
+
+             const habitsKeys = [
+                 { key: 'facial_water_intake', label: 'Ingestão Água (Facial)' },
+                 { key: 'facial_smoker_avg', label: 'Tabagista (Média)' },
+                 { key: 'facial_alcohol_avg', label: 'Etilista (Média)' },
+                 { key: 'facial_regular_diet', label: 'Alimentação Regular?' },
+                 { key: 'facial_diet_type', label: 'Tipo Dieta (Facial)' },
+                 { key: 'facial_weightloss_med', label: 'Usa Med. Emagrecer?' },
+                 { key: 'facial_good_sleep', label: 'Sono Tranquilo?' },
+                 { key: 'facial_physical_activity', label: 'Ativ. Física (Facial)' },
+                 { key: 'facial_sun_exposure', label: 'Toma Sol?' },
+                 { key: 'facial_artificial_tanning', label: 'Bronzeamento Artificial?' },
+                 { key: 'facial_sunscreen', label: 'Usa Protetor Solar?' },
+                 { key: 'facial_makeup', label: 'Usa Maquiagem?' },
+                 { key: 'facial_cosmetics', label: 'Usa Cosméticos?' },
+                 { key: 'facial_botox', label: 'Botox?' },
+                 { key: 'facial_prev_treatment', label: 'Trat. Facial Anterior' },
+                 { key: 'facial_prev_surgery', label: 'Cirurgia Facial Anterior' },
+             ];
+
+            const visualExamKeys = [
+                 { key: 'facial_skin_tone', label: 'Tom de Pele' },
+                 { key: 'facial_pilosity', label: 'Pilosidade' },
+                 { key: 'facial_pilosity_other', label: 'Outra Pilosidade' },
+                 { key: 'facial_skin_thickness', label: 'Espessura Pele' },
+                 { key: 'facial_skin_appearance', label: 'Aparência Pele' },
+                 { key: 'facial_ostia', label: 'Condição Óstios' },
+                 { key: 'facial_ostia_zonat', label: 'Óstios Dilatados Zona T?'},
+                 { key: 'facial_oiliness_grade', label: 'Grau Oleosidade' },
+                 { key: 'facial_has_acne', label: 'Possui Acne?' },
+                 { key: 'facial_acne_grade', label: 'Grau Acne' },
+                 { key: 'facial_presence', label: 'Presença De' },
+                 { key: 'facial_acne_scars', label: 'Sequelas Acne?' },
+                 { key: 'facial_elevated_scars', label: 'Cicatrizes Elevadas' },
+                 { key: 'facial_elevated_scars_regions', label: 'Regiões Cic. Elevadas' },
+                 { key: 'facial_distrophic_scars_regions', label: 'Regiões Cic. Distróficas' },
+                 { key: 'facial_depressed_dist', label: 'Cic. Deprimidas Dist.' },
+                 { key: 'facial_depressed_dist_regions', label: 'Regiões Cic. Dep. Dist.' },
+                 { key: 'facial_depressed_non_dist', label: 'Cic. Deprimidas Não-Dist.' },
+                 { key: 'facial_depressed_non_dist_regions', label: 'Regiões Cic. Dep. Não-Dist.' },
+                 { key: 'facial_elasticity', label: 'Elasticidade' },
+                 { key: 'facial_wrinkles', label: 'Presença Rugas?' },
+                 { key: 'facial_wrinkle_type', label: 'Tipo Rugas' },
+                 { key: 'facial_tugor', label: 'Tugor' },
+                 { key: 'facial_dyschromia', label: 'Presença Discromias?' },
+                 { key: 'facial_dyschromia_type', label: 'Tipo Discromias' },
+                 { key: 'facial_dyschromia_regions', label: 'Regiões Discromias' },
+                 { key: 'facial_dermatoheliosis', label: 'Presença Dermatoelioses?' },
+                 { key: 'facial_dermatoheliosis_type', label: 'Tipo Dermatoelioses' },
+                 { key: 'facial_dermatoheliosis_regions', label: 'Regiões Dermatoelioses' },
+                 { key: 'facial_proposed_treatment', label: 'Tratamento Proposto (Facial)' },
+                 { key: 'facial_treatment_goal', label: 'Objetivo Tratamento (Facial)' },
+                 { key: 'facial_electro_resources', label: 'Recursos Eletroterápicos' },
+                 { key: 'facial_manual_techniques', label: 'Técnicas Manuais' },
+            ];
+
+
+             // --- Add sections to modal ---
+             addSection('Consentimento', patientData, consentKeys);
+             addSection('Dados Pessoais', patientData, personalKeys);
+             addSection('Anamnese Corporal', patientData, anamnesisCorpKeys);
+             addSection('Sistema Cardíaco/Vascular', patientData, cardioKeys);
+             addSection('Sistema Gastrointestinal', patientData, gastroKeys);
+             addSection('Sistema Respiratório e Alergias (Corp)', patientData, respAllergyKeys);
+             addSection('Histórico Médico (Corp)', patientData, historyCorpKeys);
+             addSection('Exame Físico Corporal', patientData, physicalExamKeys);
+             addSection('Anamnese Facial', patientData, anamnesisFacialKeys);
+             addSection('Hábitos (Facial)', patientData, habitsKeys);
+             addSection('Exame Visual Facial', patientData, visualExamKeys);
+
+
+             // Populate Treatment List
+             populateTreatmentList(patientData.treatments || []);
+
+             modal.style.display = "block"; // Show modal
+         }
+
+         // --- Populate Treatment List in Modal ---
+         function populateTreatmentList(treatments) {
+             treatmentListUl.innerHTML = ''; // Clear existing list
+             if (!treatments || treatments.length === 0) {
+                 treatmentListUl.innerHTML = '<li>Nenhum tratamento registrado.</li>';
+                 return;
+             }
+
+             treatments.forEach(treatment => {
+                 const li = document.createElement('li');
+                 li.innerHTML = `
+                     <div class="treatment-info">
+                         <span class="check-icon">✓</span>
+                         <span>${treatment.name}</span>
+                         <span class="treatment-date">(${formatDateBR(treatment.date)})</span>
+                     </div>
+                     `;
+                 // Add delete button? For now, just listing
+                 treatmentListUl.appendChild(li);
+             });
+         }
+
+        // --- Event Listeners ---
+
+        // Form submission (Save/Update)
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const patientData = getFormData();
+            const db = getPatientDB();
+            const editingId = editingPatientIdInput.value;
+
+            if (editingId) {
+                 // Update existing patient
+                 if (db[editingId]) {
+                    // Merge new data with existing, keeping ID and potentially treatments
+                    db[editingId] = { ...db[editingId], ...patientData, id: editingId };
+                    savePatientDB(db);
+                    alert('Ficha atualizada com sucesso!');
+                    clearForm();
+                 } else {
+                     alert('Erro: Paciente não encontrado para atualização.');
+                 }
+             } else {
+                 // Create new patient
+                const newId = patientData.corp_rg || generateId(); // Use RG as ID if available
+                if (db[newId]) {
+                    // Handle potential duplicate RG - ask user? For now, alert.
+                    if (!confirm(`Já existe um paciente com o RG ${newId}. Deseja sobrescrever a ficha existente?`)) {
+                         return; // Stop if user cancels overwrite
+                     }
+                }
+                 patientData.id = newId; // Assign the ID
+                 db[newId] = patientData;
+                 savePatientDB(db);
+                 alert('Ficha salva com sucesso!');
+                 clearForm();
+             }
+        });
+
+        // Clear form button
+        clearFormButton.addEventListener('click', clearForm);
+
+        // Search button click
+        searchButton.addEventListener('click', () => {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            if (!searchTerm) {
+                alert('Por favor, digite um nome para buscar.');
+                return;
+            }
+
+            const db = getPatientDB();
+            let foundPatient = null;
+
+            // Search by name (case-insensitive) or RG
+            for (const id in db) {
+                const patient = db[id];
+                const nameMatch = (patient.corp_name?.toLowerCase().includes(searchTerm) || patient.facial_name?.toLowerCase().includes(searchTerm));
+                const rgMatch = patient.corp_rg === searchTerm; // Exact match for RG search
+
+                if (nameMatch || rgMatch) {
+                    foundPatient = patient;
+                    break; // Find the first match
+                }
+            }
+
+            if (foundPatient) {
+                displayPatientDetailsInModal(foundPatient);
+            } else {
+                alert(`Nenhum paciente encontrado com o nome ou RG: "${searchInput.value}"`);
+                 modalPatientData.innerHTML = `<p>Nenhum paciente encontrado com o termo: "${searchInput.value}"</p>`;
+                 modalPatientName.textContent = 'Não Encontrado';
+                 treatmentListUl.innerHTML = '';
+                 // Optionally still show the modal with the 'not found' message
+                 // modal.style.display = "block";
+            }
+        });
+
+         // Search on Enter key press
+         searchInput.addEventListener('keypress', (event) => {
+             if (event.key === 'Enter') {
+                 searchButton.click(); // Trigger search button click
+             }
+         });
+
+        // Close modal button
+        closeModalButton.addEventListener('click', () => {
+            modal.style.display = "none";
+            currentPatientId = null; // Clear current patient ID when closing
+        });
+
+        // Close modal if clicking outside the content
+        window.addEventListener('click', (event) => {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                currentPatientId = null;
+            }
+        });
+
+         // Add Treatment Button
+         addTreatmentButton.addEventListener('click', () => {
+             const treatmentName = newTreatmentNameInput.value.trim();
+             const treatmentDate = newTreatmentDateInput.value;
+
+             if (!treatmentName || !treatmentDate) {
+                 alert('Por favor, preencha o nome e a data do tratamento.');
+                 return;
+             }
+
+             if (!currentPatientId) {
+                 alert('Erro: Nenhum paciente selecionado no modal.');
+                 return;
+             }
+
+             const db = getPatientDB();
+             const patient = db[currentPatientId];
+
+             if (patient) {
+                 if (!patient.treatments) {
+                     patient.treatments = [];
+                 }
+                 patient.treatments.push({
+                     name: treatmentName,
+                     date: treatmentDate,
+                     // completed: true // Assuming adding means completed
+                 });
+
+                 // Sort treatments by date descending (most recent first)
+                 patient.treatments.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+
+                 savePatientDB(db);
+                 populateTreatmentList(patient.treatments); // Update list in modal
+
+                 // Clear inputs
+                 newTreatmentNameInput.value = '';
+                 newTreatmentDateInput.value = '';
+             } else {
+                 alert('Erro ao adicionar tratamento: Paciente não encontrado.');
+             }
+         });
+
+         // Edit Patient Button (from Modal)
+         editPatientButton.addEventListener('click', () => {
+             if (!currentPatientId) {
+                 alert('Erro: Nenhum paciente selecionado para editar.');
+                 return;
+             }
+             const db = getPatientDB();
+             const patient = db[currentPatientId];
+             if (patient) {
+                 populateForm(patient); // Load data into the main form
+                 modal.style.display = "none"; // Close the modal
+                 window.scrollTo(0, 0); // Scroll to top to see the form
+             } else {
+                 alert('Erro: Paciente não encontrado no banco de dados.');
+             }
+         });
+
+
+         // Delete Patient Button (from Modal)
+         deletePatientButton.addEventListener('click', () => {
+             if (!currentPatientId) {
+                 alert('Erro: Nenhum paciente selecionado para excluir.');
+                 return;
+             }
+
+             if (confirm(`Tem certeza que deseja excluir permanentemente a ficha de ${modalPatientName.textContent}? Esta ação não pode ser desfeita.`)) {
+                 const db = getPatientDB();
+                 if (db[currentPatientId]) {
+                     delete db[currentPatientId];
+                     savePatientDB(db);
+                     alert('Ficha do paciente excluída com sucesso.');
+                     modal.style.display = "none"; // Close modal
+                     currentPatientId = null;
+                 } else {
+                     alert('Erro: Paciente não encontrado para exclusão.');
+                 }
+             }
+         });
+
+        // Calculate RCQ automatically when waist or hip changes
+        document.getElementById('corp_waist_circ')?.addEventListener('input', calculateRCQ);
+        document.getElementById('corp_hip_circ')?.addEventListener('input', calculateRCQ);
+
+         // --- Consent Printing ---
+         printConsentBtn.addEventListener('click', () => {
+            const patientName = document.getElementById('consent-patient-name').value;
+            // Try getting RG from corporeal form first, maybe add a dedicated consent RG field if needed
+            const patientRg = document.getElementById('corp-rg').value;
+            const treatmentName = document.getElementById('consent-treatment').value;
+            const consentDateISO = document.getElementById('consent-date').value;
+
+            if (!patientName || !treatmentName || !consentDateISO || !patientRg) {
+                alert('Preencha o Nome do Paciente, RG (na ficha corporal), Tratamento e Data no Termo de Consentimento antes de imprimir.');
+                return;
+            }
+
+             // Populate the printable div
+             printPatientNameSpan.textContent = patientName;
+             printPatientRgSpan.textContent = patientRg;
+             printTreatmentNameSpan.textContent = treatmentName;
+             printConsentDateSpan.textContent = formatDateBR(consentDateISO);
+             printConsentTextDiv.innerHTML = FULL_CONSENT_TEXT.replace(/\n/g, '<br>'); // Add line breaks
+
+             // Trigger print dialog
+             window.print();
+         });
+
+
+        // --- Initial Load ---
+        clearForm(); // Start with a clean form and today's date in consent
+        consentFullTextDiv.innerHTML = FULL_CONSENT_TEXT.replace(/\n/g, '<br>'); // Load full consent text into details
+
+
+         // --- Auto-save attempt (debounced) ---
+         let autoSaveTimeout;
+         const DEBOUNCE_DELAY = 2000; // 2 seconds delay
+
+         /*
+         // This auto-save is tricky with multiple sections and potential overwrites.
+         // Let's disable it for now to ensure manual save works perfectly.
+         // Can be re-enabled and refined later if essential.
+
+         form.addEventListener('input', (event) => {
+             // Don't auto-save search input or buttons
+             if (event.target.type === 'search' || event.target.type === 'button' || event.target.type === 'submit') {
+                 return;
+             }
+
+             clearTimeout(autoSaveTimeout);
+             autoSaveTimeout = setTimeout(() => {
+                 const editingId = editingPatientIdInput.value;
+                 // Only auto-save if actively editing an existing patient?
+                 // Or save to a temporary draft? Needs careful consideration.
+                 if (editingId) {
+                     const patientData = getFormData();
+                     const db = getPatientDB();
+                     if (db[editingId]) {
+                         console.log("Auto-saving draft for:", editingId);
+                         db[editingId] = { ...db[editingId], ...patientData, id: editingId };
+                         savePatientDB(db);
+                         // Maybe add a subtle indicator that it was saved
+                     }
+                 } else {
+                     // Auto-saving a NEW form? Could lead to many drafts.
+                     // console.log("Auto-save skipped for new form.");
+                 }
+             }, DEBOUNCE_DELAY);
+         });
+         */
+
+    </script>
+
+</body>
+</html>
